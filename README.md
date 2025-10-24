@@ -63,3 +63,63 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
+
+### 2️⃣ Data Preprocessing
+
+data = pd.read_csv("Mall_Customers.csv")
+X = data[['Annual Income (k$)', 'Spending Score (1-100)']]
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+
+### 3️⃣ Silhouette Optimization
+
+eps_values = np.arange(0.1, 1.5, 0.1)
+minpts_values = [3, 5, 7, 10]
+scores = []
+
+for eps in eps_values:
+    for min_pts in minpts_values:
+        model = DBSCAN(eps=eps, min_samples=int(min_pts))
+        labels = model.fit_predict(X_scaled)
+
+        if len(set(labels)) > 1 and -1 not in set(labels):
+            score = silhouette_score(X_scaled, labels)
+            scores.append((eps, min_pts, score))
+
+### 4️⃣ Heatmap Visualization
+
+score_df = pd.DataFrame(scores, columns=["Eps", "MinPts", "Silhouette"])
+pivot = score_df.pivot("MinPts", "Eps", "Silhouette")
+
+plt.figure(figsize=(10,6))
+sns.heatmap(pivot, annot=True, cmap="YlGnBu", fmt=".3f")
+plt.title("Silhouette Score Heatmap (DBSCAN)")
+plt.show()
+
+### 5️⃣ Final Model
+
+best_params = score_df.loc[score_df['Silhouette'].idxmax()]
+best_eps = best_params['Eps']
+best_minpts = int(best_params['MinPts'])
+
+final_dbscan = DBSCAN(eps=best_eps, min_samples=best_minpts)
+labels = final_dbscan.fit_predict(X_scaled)
+data['Cluster'] = labels
+
+### 6️⃣ Cluster Visualization
+
+plt.figure(figsize=(8,6))
+sns.scatterplot(
+    x=X['Annual Income (k$)'], 
+    y=X['Spending Score (1-100)'],
+    hue=data['Cluster'],
+    palette='Set1',
+    s=100
+)
+plt.title(f"DBSCAN Clustering (eps={best_eps:.2f}, minPts={best_minpts})")
+plt.xlabel("Annual Income (k$)")
+plt.ylabel("Spending Score (1-100)")
+plt.legend(title="Cluster")
+plt.show()
