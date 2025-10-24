@@ -13,7 +13,7 @@ Unlike K-Means, DBSCAN does not require the number of clusters `k` in advance �
 
 | Concept          | Formula / Description |
 |----------|------------------------|
-| **ε-Neighborhood** | $$\( N_\varepsilon(p) = \{ q \in D \ $$| $$\ dist(p, q) \leq \varepsilon \} \) $$|
+| **ε-Neighborhood** | $$\( N_\varepsilon(p)$$ = $$\{ q \in D \ $$| $$\ dist(p, q) \leq \varepsilon \} \) $$|
 | **Core Point** | A point $$\( p \)$$ is a core point if $$\( |N_\varepsilon(p)$$| $$\geq \text{MinPts} \)$$ |
 | **Directly Density Reachable** | A point $$\( q \)$$ is directly density reachable from $$\( p \)$$ if $$\( q \in N_\varepsilon(p) \)$$ and $$\( p \)$$ is a core point |
 | **Density Connected** | Points $$\( p \)$$ and $$\( q \)$$ are density-connected if there exists a chain of core points connecting them |
