@@ -31,6 +31,8 @@
 - **Core Point:** $$\( |N_\varepsilon(p)| \geq \text{MinPts} \)$$  
 - **Silhouette Score:** $$\( s = \frac{b - a}{\max(a, b)} \)$$
   (where $$\( a \)$$ = intra-cluster distance, $$\( b \)$$ = nearest-cluster distance)
+  -**Density Connected** | Points $$\( p \)$$ and $$\( q \)$$ are density-connected if there exists a chain of core points connecting them |
+  
 
 ---
 
@@ -54,8 +56,9 @@
 
 ## ⚙️ Workflow
 
-### 1️⃣ Import Libraries
+### Pseudocode
 ```python
+### 1️⃣Import libraries
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
